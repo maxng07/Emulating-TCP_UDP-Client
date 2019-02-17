@@ -18,7 +18,7 @@ The tcp/udp emulated client does similar to what you can do with NetCat utilitie
 Sample command of NC
 Establishing tcp port 80 session with content “test out the server” to a remote server.
 
-echo -n "test out the server" | nc -v www.akamai.com 80
+echo -n "test out the server" | nc -v localhost 80
 
 versus running tcpclient.go with punted text content
 
