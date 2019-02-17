@@ -7,6 +7,7 @@ config.json provides base configuration for the emulated client, in json format.
 1. Address - the address of the server, either IP address or hostname or FQDN
 2. Protocol - TCP or UDP
 3. Port - TCP or UDP port
+
 A sampe of config.json is provided as example. Values have to be embedded within the quotes "". You can bake the config into the code but for configuration flexibility, added an external file config.json for configuration parameters.
 
 You can test the GO program without building or installing the binaries, by using go run ./tcpclient.go
@@ -20,9 +21,10 @@ Establishing tcp port 80 session with content “test out the server” to a rem
 
 echo -n "test out the server" | nc -v localhost 80
 
-versus running tcpclient.go with punted text content
+versus running tcpclient.go with punted text content.
 
 tcpdump on tcp port 80 with snaplength of 1500 for 20 packet, verbose (vvv)
+
 sudo tcpdump -i en0 -vvv -s 1500 -X -c 20 port 80
 
 The differences are highlighted in the tcpdump packet capture. You can view the pcap using wireshark. The connection emulate port 80 but it is not actually sending any HTTP. With tcpclient.go, because the session is preserve, the remote server responded with a HTTP error. A HTTP server will expect HTTP messages. Some HTTP servers from testing, closes the connection upon receiving an invalid message, while others could still be waiting. The former could work to remove exhausting TCP sockets/memory and avoids invalid TCP session dangling. 
