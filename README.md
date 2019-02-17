@@ -16,7 +16,8 @@ Added the func init() which gets loaded after all the imports, for declaration o
 The tcp/udp emulated client does similar to what you can do with NetCat utilities except, it does not close the connection (for TCP) after the message is send. NetCat closes the connection immediately after sending the message.
 
 Sample command of NC
-Establishing tcp port 80 session with content “test out the server” to a remote server
+Establishing tcp port 80 session with content “test out the server” to a remote server.
+
 echo -n "test out the server" | nc -v www.akamai.com 80
 
 versus running tcpclient.go with punted text content
