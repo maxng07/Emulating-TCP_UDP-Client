@@ -1,6 +1,6 @@
 # Emulating-TCP_UDP-Client - Protocol Fuzzing
 
-This is a TCP or UDP client that can emulate a network stack client calling a TCP or UDP server. It prompts on the screen on the message you want to send to the Server. 
+This is a TCP and UDP client that can emulate a network stack client calling a TCP or UDP server. It prompts you on the screen, on the message you want to send to the Server. 
 
 config.json provides base configuration for the emulated client, in json format. Current Config parameter takes in
 
@@ -12,9 +12,10 @@ A sampe of config.json is provided as example. Values have to be embedded within
 
 You can test the GO program without building or installing the binaries, by using go run ./tcpclient.go
 
+Enhancement on version2.
 Added the func init() which gets loaded after all the imports, for declaration of the config.json variables to be used. The main func main() is loaded after this, client runs in the main package.
 
-The tcp/udp emulated client does similar to what you can do with NetCat utilities except, it does not close the connection (for TCP) after the message is send. NetCat closes the connection immediately after sending the message.
+The tcp/udp emulated client does similar to what you can do with NetCat utilities except, it does not close the connection (for TCP) after the message is send. NetCat closes the connection immediately after sending the message. Because the NC client closes the connection, you cannot pinpoint what the remote server will do if the session is not closed.
 
 Sample command of NC
 Establishing tcp port 80 session with content “test out the server” to a remote server.
@@ -27,7 +28,7 @@ tcpdump on tcp port 80 with snaplength of 1500 for 20 packet, verbose (vvv)
 
 sudo tcpdump -i en0 -vvv -s 1500 -X -c 20 port 80
 
-The differences are highlighted in the tcpdump packet capture. You can view the pcap using wireshark. The connection emulate port 80 but it is not actually sending any HTTP. With tcpclient.go, because the session is preserve, the remote server responded with a HTTP error. A HTTP server will expect HTTP messages. Some HTTP servers from testing, closes the connection upon receiving an invalid message, while others could still be waiting. The former could work to remove exhausting TCP sockets/memory and avoids invalid TCP session dangling. 
+The differences are highlighted in the tcpdump packet capture. You can view the pcap using wireshark. The connection emulate port 80 but it is not actually sending any HTTP. With tcpclient.go, because the session is preserve, the remote server responded with a HTTP error. A HTTP server will expect HTTP messages. Some HTTP servers from testing, closes the connection upon receiving an invalid message, while others could still be waiting. The former could work to remove exhausting TCP sockets/memory and avoids invalid TCP session dangling, which is a better approach. Testing on HTTP loadbalancer also yield different behaviours out there, most would respond with invalid HTTP message and close the connection, some would not respond (invalid HTTP GET message) but preserve the connection. Again, these are for educational purposes and meant to observe a stack implementation behavior. The tool should not be used for undesirable behavior that affects the normal usage of the Internet. 
 
 This demonstrate it is possible to send messages using standard wellknown ports, a firewall could let it through without inspecting further if it is a valid packet. Only parsing it deeper will reveal.
 
